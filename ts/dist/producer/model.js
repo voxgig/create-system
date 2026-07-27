@@ -1,0 +1,71 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.model_producer = void 0;
+const path_1 = __importDefault(require("path"));
+// Recursively sort object keys alphabetically so the serialized model output
+// is byte-for-byte identical to the Go implementation, whose encoding/json
+// emits object keys in sorted order. Arrays keep their order; only object keys
+// are reordered. Returns a new value and does not mutate the input model.
+function sortKeys(value) {
+    if (Array.isArray(value)) {
+        return value.map(sortKeys);
+    }
+    if (null != value && 'object' === typeof value) {
+        const out = {};
+        for (const key of Object.keys(value).sort()) {
+            out[key] = sortKeys(value[key]);
+        }
+        return out;
+    }
+    return value;
+}
+// Builds the main model file, after unification.
+const model_producer = async (build, ctx) => {
+    let pr = {
+        ok: true,
+        name: 'model',
+        reload: false,
+        step: ctx.step,
+        active: true,
+        errs: [],
+        runlog: []
+    };
+    if ('post' !== ctx.step) {
+        return pr;
+    }
+    let json = JSON.stringify(sortKeys(build.model), null, 2);
+    let filename = path_1.default.basename(build.path);
+    let filenameparts = filename.match(/^(.*)\.[^.]+$/);
+    if (filenameparts) {
+        filename = filenameparts[1];
+    }
+    let file = build.opts.base + '/' + filename + '.json';
+    // Skip write when output is unchanged — avoids mtime churn that would
+    // invalidate caches (here and in downstream watchers).
+    let existing;
+    try {
+        existing = build.fs.readFileSync(file, 'utf8');
+    }
+    catch { }
+    if (existing === json) {
+        build.log.debug({
+            point: 'write-model-skip',
+            path: file,
+            note: file.replace(process.cwd(), '.') + ' (unchanged)'
+        });
+        return pr;
+    }
+    build.log.info({
+        point: 'write-model',
+        path: file,
+        note: file.replace(process.cwd(), '.')
+    });
+    build.fs.mkdirSync(path_1.default.dirname(file), { recursive: true });
+    build.fs.writeFileSync(file, json);
+    return pr;
+};
+exports.model_producer = model_producer;
+//# sourceMappingURL=model.js.map
