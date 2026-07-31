@@ -1,142 +1,71 @@
-# @voxgig/model
+# @voxgig/create-system
 
-A framework for **universal application modeling**: describe a system once as a
-single declarative model, then generate every downstream artifact — code,
-configuration, documentation, infrastructure — from that one source of truth.
-
-The core tool unifies `.aontu` source (using [CUE](https://cuelang.org)-style
-unification, via [aontu](https://github.com/voxgig/aontu)) into one canonical
-JSON model, then hands that model to your generators ("actions"). It can build
-once or watch and rebuild on change.
-
-> **Status: prototype.** The concepts are stable; specific APIs and conventions
-> may still change. Inspired by [CUE](https://cuelang.org).
-
-
-## Install
-
-The TypeScript package (npm):
+Create an empty Voxgig system project:
 
 ```bash
-npm install @voxgig/model pino
+npm create @voxgig/system my-app
 ```
 
-`pino` is a peer dependency (logging). Requires Node.js — CI runs Node 24;
-Node 20.19+ generally works.
+(npm resolves `npm create @voxgig/system` to this package,
+`@voxgig/create-system`.)
 
-The Go module:
+The generated project is a [Seneca](https://senecajs.org) microservices
+backend with a model-driven entity layer (`@voxgig/model` +
+`@voxgig/system`), per-user data isolation via the Seneca `user` + `owner`
+plugins, and jostraca-generated Lambda deployment templates
+(`@voxgig/build`). The scaffold itself is generated with
+[jostraca](https://github.com/jostraca/jostraca) components — see
+`src/part/*` for the template parts.
+
+The project starts **empty**: the full structure is in place (model,
+environments, generation actions, tests), but there are no entities,
+services, or messages — only commented examples.
+
+## Generated structure
+
+```
+my-app/
+  README.md .gitignore
+  backend/
+    package.json tsconfig.json
+    build/            model-build generation actions (@voxgig/build EnvLambda)
+    model/            voxgig-model sources; empty, with commented examples
+    src/env/shared/   core Seneca setup (entity + user + owner)
+    src/env/local/    local runner (in-memory store)
+    src/env/lambda/   Lambda bootstrap for generated handlers
+    src/srv/          services; commented example ('thing')
+    test/unit/        starter boot tests
+```
+
+After creation:
 
 ```bash
-go get github.com/voxgig/model/go
+cd my-app/backend
+npm install
+npm run build   # compile model + generate + tsc
+npm test        # starter tests (green out of the box)
+npm run local   # boot the empty backend
 ```
 
-Both implementations live in this repository — `ts/` (TypeScript, canonical)
-and `go/` (Go, kept in parity). See [go/README.md](./go/README.md) for Go usage
-and [AGENTS.md](./AGENTS.md) for working on the repo.
+## Comment convention in generated files
 
+In the generated model and service files, `##` (jsonic) and `////` (TS)
+mark prose comments; a single `#` / `//` marks **disabled example code**.
+Uncommenting one comment level of an example block yields working code —
+the example `thing` entity/service/messages build, generate a Lambda
+handler, and answer messages once uncommented.
 
-## Quick start
+## Develop
 
 ```bash
-# 1. a model
-mkdir -p model && cat > model/model.aontu <<'EOF'
-service: name: 'orders'
-service: port: *8080 | integer
-EOF
-
-# 2. build it -> writes model/model.json
-npx voxgig-model model/model.aontu
-
-# 3. or watch and rebuild on change
-npx voxgig-model --watch model/model.aontu
+npm install
+npm run build
+npm test
 ```
 
-`model/model.json`:
-
-```json
-{ "service": { "name": "orders", "port": 8080 } }
-```
-
-Use it from code instead of the CLI:
-
-```js
-const { Model } = require('@voxgig/model')
-
-const model = new Model({ path: 'model/model.aontu', base: 'model' })
-const result = await model.run()
-if (!result.ok) throw new Error(result.errs.join('; '))
-```
-
-
-## What it does
-
-- **Unifies** `.aontu` source — with types, defaults, references, wildcards,
-  and imports — into a single validated JSON model.
-- **Generates** artifacts from that model through **actions**: small JS modules
-  you declare in config and that receive the unified model.
-- **Watches** source and config files and rebuilds incrementally, tracking
-  imports as dependencies.
-- **Previews** safely with `--dryrun` (writes redirected to an in-memory
-  filesystem), and can build against any `fs` implementation.
-
-
-## Documentation
-
-| If you want to… | Read |
-|------------------|------|
-| Learn by building a model step by step | [Tutorial](./docs/tutorial.md) |
-| Accomplish a specific task | [How-to guides](./docs/how-to.md) |
-| Look up a flag, type, config key, or language construct | [Reference](./docs/reference.md) |
-| Understand how and why it works | [Explanation](./docs/explanation.md) |
-
-Working **on** this repository (including with an AI coding agent)?
-See [AGENTS.md](./AGENTS.md).
-
-
-## A fuller example
-
-A model that generates an environment file from its services:
-
-```
-my-project/
-├─ model/
-│  ├─ model.aontu
-│  └─ .model-config/model-config.aontu
-└─ build/envFile.js
-```
-
-```jsonic
-# model/model.aontu
-shape: service: { name?: string, port: *8080 | integer }
-service: orders: $.shape.service & { name: 'orders' }
-service: web:    $.shape.service & { name: 'web', port: 443 }
-```
-
-```jsonic
-# model/.model-config/model-config.aontu
-sys: model: action: { envFile: load: 'build/envFile' }
-```
-
-```js
-// build/envFile.js
-const Path = require('node:path')
-module.exports = async function envFile(model, build) {
-  const root = Path.resolve(build.path, '..', '..')
-  const lines = Object.entries(model.service)
-    .map(([n, s]) => `PORT_${n.toUpperCase()}=${s.port}`)
-  build.fs.writeFileSync(Path.resolve(root, 'services.env'), lines.join('\n') + '\n')
-  return { ok: true }
-}
-```
-
-```bash
-npx voxgig-model model/model.aontu   # writes model/model.json and services.env
-```
-
-See the [tutorial](./docs/tutorial.md) for the same example built up from
-scratch.
-
+`src/create.ts` is the CLI; `src/scaffold.ts` composes the jostraca
+component parts in `src/part/`.
 
 ## License
 
-MIT © Voxgig Ltd. See [LICENSE](./LICENSE).
+MIT. Copyright (c) Voxgig Ltd.

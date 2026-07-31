@@ -1,0 +1,58 @@
+{
+  "name": "@voxgig/create-system",
+  "version": "0.1.0",
+  "description": "Create an empty Voxgig system project: npm create @voxgig/system <name>",
+  "main": "dist/create.js",
+  "type": "commonjs",
+  "types": "dist/create.d.ts",
+  "bin": {
+    "create-system": "dist/create.js"
+  },
+  "homepage": "https://github.com/voxgig/create-system",
+  "keywords": [
+    "voxgig",
+    "system",
+    "create",
+    "scaffold",
+    "jostraca"
+  ],
+  "author": "Richard Rodger (http://richardrodger.com)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/voxgig/create-system.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc --build src test",
+    "test": "node --enable-source-maps --test \"dist-test/**/*.test.js\"",
+    "watch": "tsc --build src test -w",
+    "clean": "rm -rf dist dist-test node_modules yarn.lock package-lock.json",
+    "reset": "npm run clean && npm i && npm run build && npm test",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish": "npm run clean && npm i && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run build && npm run test && npm run repo-tag && npm run repo-stage-publish",
+    "repo-stage-publish": "aql vault exec --for=npm vxg:pub01 -- npm stage publish --registry https://registry.npmjs.org --access=public",
+    "repo-stage-publish-dry": "aql vault exec --dry-run --for=npm vxg:pub01 -- npm stage publish --registry https://registry.npmjs.org --access=public --dry-run",
+    "repo-stage-list": "aql vault exec --for=npm vxg:pub01 -- npm stage list",
+    "repo-stage-view": "aql vault exec --for=npm vxg:pub01 -- npm stage view",
+    "repo-stage-approve": "aql vault exec --for=npm vxg:pub01 -- npm stage approve",
+    "repo-stage-reject": "aql vault exec --for=npm vxg:pub01 -- npm stage reject"
+  },
+  "license": "MIT",
+  "files": [
+    "src",
+    "dist",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "jostraca": "0.31.2"
+  },
+  "devDependencies": {
+    "@hapi/code": "^9.0.3",
+    "@tsconfig/node16": "16.1.8",
+    "@types/node": "26.1.2",
+    "typescript": "5.9.3"
+  }
+}

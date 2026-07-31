@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "esModuleInterop": true,
+    "module": "node16",
+    "noEmitOnError": true,
+    "outDir": "../dist",
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2021"
+  }
+}

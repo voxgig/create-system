@@ -1,8 +1,0 @@
-
-
-sys: model: action: &: {
-  load: string
-}
-
-sys: model: order: action: *''
-
