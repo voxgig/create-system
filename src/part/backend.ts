@@ -51,7 +51,7 @@ function BackendPart(spec: Spec) {
         '@hapi/code': '^9.0.3',
         '@tsconfig/node16': '16.1.8',
         '@types/node': '^26.1.1',
-        '@voxgig/build': '4.1.0',
+        '@voxgig/build': '4.2.0',
         typescript: '5.9.3',
       },
     }, null, 2) + '\n')

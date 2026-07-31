@@ -39,6 +39,7 @@ main: msg: @"msg.aontu"          # Seneca Messages
 main: srv: @"srv.aontu"          # Services
 main: conf: @"conf.aontu"        # Configuration
 main: ent: @"ent.aontu"          # Entities
+main: env: @"env.aontu"          # Target environments
 
 
 main: srv: &: options: {
@@ -151,6 +152,24 @@ aim: {}
 `)
     })
 
+    File({ name: 'env.aontu' }, () => {
+      Content(`
+## Target environments. Each active environment generates deployment
+## artifacts under gen/env/<name>/ and (once) a runtime entry under
+## src/env/. Add more with: npx voxgig-system add env <name|spec>
+## Kinds: local, basic, docker, vm, aws, azure, cloudflare.
+
+local: { active: true }
+
+# basic: { active: true }
+# docker: { active: true }
+# vm: { active: true }
+# aws: { active: true, region: 'us-east-1', stage: 'dev' }
+# azure: { active: true }
+# cloudflare: { active: true }
+`)
+    })
+
     File({ name: 'conf.aontu' }, () => {
       Content(`
 core: name: '${name}'
@@ -186,9 +205,12 @@ sys: model: action: {
   res_yml: {
     load: 'build/res_yml'
   }
+  env_gen: {
+    load: 'build/env_gen'
+  }
 }
 
-sys: model: order: action: 'srv_yml,srv_handler,res_yml'
+sys: model: order: action: 'srv_yml,srv_handler,res_yml,env_gen'
 `)
       })
     })

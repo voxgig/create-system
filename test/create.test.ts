@@ -22,6 +22,8 @@ const EXPECTED_FILES = [
   'backend/build/srv_yml.js',
   'backend/build/srv_handler.js',
   'backend/build/res_yml.js',
+  'backend/build/env_gen.js',
+  'backend/model/env.aontu',
   'backend/tm/lambda/README.md',
   'backend/model/model.aontu',
   'backend/model/ent.aontu',
