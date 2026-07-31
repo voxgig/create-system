@@ -1,12 +1,68 @@
 /* Copyright © 2026 Voxgig Ltd, MIT License. */
 
 // backend/build/: the model-build generation actions. Plain JS, loaded by
-// voxgig-model (declared in model/.model-config/model-config.aontu); each
-// delegates to @voxgig/build's EnvLambda (jostraca-based templates).
+// voxgig-model (declared in model/.model-config/model-config.aontu).
+//
+// Each action resolves its template in layers (first hit wins):
+//   1. backend/src/gen/<name>.ts  compiled generator override
+//   2. backend/tm/lambda/<frag>   project fragment (via spec.tm)
+//   3. @voxgig/build defaults
+// Use `voxgig-system template list|eject|diff` to customize.
 
 import { File, Content, Folder } from 'jostraca'
 
 import type { Spec } from '../scaffold'
+
+
+// One generation action: layered override -> EnvLambda default.
+function action(name: string, generator: string, folderLines: string,
+  specLines: string): string {
+  return `// Generation action: ${name}. Templates resolve in layers - project
+// src/gen/${name}.ts (code override), project tm/lambda fragments, then
+// @voxgig/build defaults. See: voxgig-system template list|eject|diff.
+
+const Fs = require('fs')
+const Path = require('path')
+
+const { EnvLambda } = require('@voxgig/build')
+
+${folderLines}
+const tm = Path.join(__dirname, '..', 'tm', 'lambda')
+
+module.exports = async function(model, build) {
+  Fs.mkdirSync(folder, { recursive: true })
+
+  // Layer 1: compiled project override (src/gen -> dist/gen).
+  const custom = Path.join(__dirname, '..', 'src', 'gen', '${name}.ts')
+  if (Fs.existsSync(custom)) {
+    let mod = null
+    try {
+      mod = require('../dist/gen/${name}.js')
+    }
+    catch (e) {
+      if ('MODULE_NOT_FOUND' !== e.code) {
+        throw e
+      }
+      console.log('${name}: src/gen/${name}.ts exists but is not ' +
+        'compiled - using the default template for this pass; ' +
+        'run: npm run build && npm run model-build')
+    }
+    if (mod) {
+      const gen = mod.${generator} || mod.${name} || mod.default
+      return gen(model, {
+${specLines}
+    tm,
+  })
+    }
+  }
+
+  await EnvLambda.${generator}(model, {
+${specLines}
+    tm,
+  })
+}
+`
+}
 
 
 function BuildPart(_spec: Spec) {
@@ -14,73 +70,68 @@ function BuildPart(_spec: Spec) {
   Folder({ name: 'build' }, () => {
 
     File({ name: 'srv_yml.js' }, () => {
-      Content(`// Generates gen/serverless/srv.yml: the per-service Serverless function
-// definitions derived from the model. Uses @voxgig/build's EnvLambda, whose
-// templates are jostraca-based and ship precompiled.
-
-const Fs = require('fs')
-const Path = require('path')
-
-const { EnvLambda } = require('@voxgig/build')
-
-const folder = Path.join(__dirname, '..', 'gen', 'serverless')
-
-module.exports = async function(model, build) {
-  Fs.mkdirSync(folder, { recursive: true })
-  await EnvLambda.srv_yml(model, {
-    folder,
-  })
-}
-`)
+      Content(action('srv_yml', 'srv_yml',
+        "const folder = Path.join(__dirname, '..', 'gen', 'serverless')",
+        '    folder,'))
     })
 
     File({ name: 'srv_handler.js' }, () => {
-      Content(`// Generates one Lambda handler per service, into src/handler/lambda/<srv>.ts.
-// Uses @voxgig/build's EnvLambda (jostraca-based templates, precompiled).
-
-const Fs = require('fs')
-const Path = require('path')
-
-const { EnvLambda } = require('@voxgig/build')
-
-const folder = Path.join(__dirname, '..', 'src', 'handler')
-const envFolder = Path.join('..', '..', 'env')
-
-module.exports = async function(model, build) {
-  Fs.mkdirSync(Path.join(folder, 'lambda'), { recursive: true })
-  await EnvLambda.srv_handler(model, {
-    folder: Path.join(folder, 'lambda'),
+      Content(action('srv_handler', 'srv_handler',
+        "const folder = Path.join(__dirname, '..', 'src', 'handler', 'lambda')",
+        `    folder,
     start: 'lambda',
     env: {
-      folder: Path.join(envFolder, 'lambda'),
+      folder: Path.join('..', '..', 'env', 'lambda'),
     },
-    lang: 'ts',
-  })
-}
-`)
+    lang: 'ts',`))
     })
 
     File({ name: 'res_yml.js' }, () => {
-      Content(`// Generates gen/serverless/res.yml: the Serverless resources block (IAM role,
-// queues) derived from the model. Uses @voxgig/build's EnvLambda
-// (jostraca-based templates, precompiled).
-
-const Fs = require('fs')
-const Path = require('path')
-
-const { EnvLambda } = require('@voxgig/build')
-
-const folder = Path.join(__dirname, '..', 'gen', 'serverless')
-
-module.exports = async function(model, build) {
-  Fs.mkdirSync(folder, { recursive: true })
-  await EnvLambda.resources_yml(model, {
-    folder,
+      Content(action('res_yml', 'resources_yml',
+        "const folder = Path.join(__dirname, '..', 'gen', 'serverless')",
+        `    folder,
     filename: 'res.yml',
-    custom: null,
+    custom: null,`))
+    })
   })
-}
+
+  // The project template folder: fragments ejected here shadow the
+  // package defaults.
+  Folder({ name: 'tm' }, () => {
+    Folder({ name: 'lambda' }, () => {
+      File({ name: 'README.md' }, () => {
+        Content(`# Project generation templates
+
+Fragments in this folder shadow the defaults shipped by \`@voxgig/build\`
+(\`tm/lambda/*.frag\`). Generation templates resolve in layers - first
+hit wins:
+
+1. \`../src/gen/<name>.ts\` - compiled generator override (deep custom)
+2. \`./<name>.frag\` - project fragment (text-level custom, no compile)
+3. \`@voxgig/build\` defaults
+
+Workflow:
+
+\`\`\`bash
+npx voxgig-system template list            # what exists, who provides it
+npx voxgig-system template eject srv.yml.frag
+# edit the fragment ($$slot$$ placeholders), then:
+npm run model-build
+npx voxgig-system template diff            # your copies vs the package
+\`\`\`
+
+For structural changes, eject the generator source instead:
+
+\`\`\`bash
+npx voxgig-system template eject srv_yml --code
+# edit src/gen/srv_yml.ts, then:
+npm run build && npm run model-build
+\`\`\`
+
+\`.ejected.json\` records what was ejected from which package version so
+\`template diff\` can flag upstream changes after upgrades.
 `)
+      })
     })
   })
 }
