@@ -16,7 +16,9 @@ import { scaffold } from './scaffold'
 const USAGE = `Usage: npm create @voxgig/system <name>
 
 Creates the folder <name> in the current directory, holding an empty
-Voxgig system project (backend only).
+Voxgig system project (backend only). Idempotent: over an existing
+project only missing scaffold files are added - existing files are
+never touched.
 
   <name>   project name: lowercase letters, digits, and dashes,
            starting with a letter (e.g. my-app)
@@ -43,16 +45,27 @@ async function main() {
   }
 
   const target = Path.resolve(process.cwd(), name)
+  const existing = Fs.existsSync(target) && 0 < Fs.readdirSync(target).length
 
-  if (Fs.existsSync(target) && 0 < Fs.readdirSync(target).length) {
-    console.error(`create-system: target folder is not empty: ${target}`)
-    process.exit(1)
+  const res = await scaffold({ name, folder: process.cwd() })
+
+  if (existing) {
+    // Idempotent over an existing project: only missing files were added.
+    console.log(`\nExisting project: ${name}/`)
+    if (0 === res.created.length) {
+      console.log('Already complete - nothing to add.')
+    }
+    else {
+      console.log('Added missing scaffold files:')
+      for (const f of res.created) {
+        console.log('  ' + f)
+      }
+    }
+    console.log(`(${res.skipped.length} existing files left untouched)\n`)
   }
-
-  await scaffold({ name, folder: process.cwd() })
-
-  console.log(`
-Created ${name}/
+  else {
+    console.log(`
+Created ${name}/ (${res.created.length} files)
 
 Next steps:
   cd ${name}/backend
@@ -64,6 +77,7 @@ Next steps:
 Then open backend/model/ and uncomment the examples to add your first
 entity, service, and messages.
 `)
+  }
 }
 
 

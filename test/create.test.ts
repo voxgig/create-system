@@ -101,3 +101,40 @@ describe('create-system', () => {
   })
 
 })
+
+
+describe('idempotency', () => {
+
+  test('rerun-is-a-noop', async () => {
+    const out = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'create-system-'))
+
+    const first = await scaffold({ name: 'idem', folder: out })
+    expect(first.created.length > 20).equal(true)
+    expect(first.skipped.length).equal(0)
+
+    const second = await scaffold({ name: 'idem', folder: out })
+    expect(second.created.length).equal(0)
+    expect(second.skipped.length).equal(first.created.length)
+  })
+
+
+  test('existing-files-never-touched-missing-filled', async () => {
+    const out = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'create-system-'))
+    await scaffold({ name: 'cust', folder: out })
+
+    const conf = Path.join(out, 'cust', 'backend', 'model', 'conf.aontu')
+    Fs.writeFileSync(conf, "core: name: 'customized'\n")
+
+    const readme = Path.join(out, 'cust', 'README.md')
+    Fs.rmSync(readme)
+
+    const res = await scaffold({ name: 'cust', folder: out })
+
+    // the customized file is untouched
+    expect(Fs.readFileSync(conf, 'utf8')).equal("core: name: 'customized'\n")
+    // the deleted scaffold file was restored
+    expect(res.created).equal(['README.md'])
+    expect(Fs.existsSync(readme)).equal(true)
+  })
+
+})

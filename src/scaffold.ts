@@ -14,6 +14,10 @@
 //       src/srv/          services (empty; commented example)
 //       test/             starter unit test
 
+import Fs from 'node:fs'
+import Os from 'node:os'
+import Path from 'node:path'
+
 import { Jostraca, Project, Folder } from 'jostraca'
 
 import { RootPart } from './part/root'
@@ -30,11 +34,22 @@ export type Spec = {
   folder: string   // parent folder to create the project in
 }
 
+export type ScaffoldResult = {
+  created: string[]   // files created (relative to the project folder)
+  skipped: string[]   // files that already existed and were left untouched
+}
 
-async function scaffold(spec: Spec) {
+
+// Idempotent scaffold: generate the full project into a staging folder,
+// then copy only the files that do not already exist in the target. An
+// existing (possibly customized) project is never overwritten - re-running
+// converges, filling in any scaffold files the project is missing.
+async function scaffold(spec: Spec): Promise<ScaffoldResult> {
+  const staging = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'create-system-'))
+
   const jostraca = Jostraca()
 
-  return jostraca.generate({ folder: spec.folder }, () => {
+  await jostraca.generate({ folder: staging }, () => {
     Project({ folder: spec.name }, () => {
 
       RootPart(spec)
@@ -49,6 +64,41 @@ async function scaffold(spec: Spec) {
       })
     })
   })
+
+  const from = Path.join(staging, spec.name)
+  const target = Path.join(spec.folder, spec.name)
+
+  const created: string[] = []
+  const skipped: string[] = []
+
+  const walk = (rel: string) => {
+    const src = Path.join(from, rel)
+    for (const entry of Fs.readdirSync(src, { withFileTypes: true })) {
+      if ('.jostraca' === entry.name) {
+        continue
+      }
+      const relpath = Path.join(rel, entry.name)
+      if (entry.isDirectory()) {
+        walk(relpath)
+      }
+      else {
+        const dest = Path.join(target, relpath)
+        if (Fs.existsSync(dest)) {
+          skipped.push(relpath)
+        }
+        else {
+          Fs.mkdirSync(Path.dirname(dest), { recursive: true })
+          Fs.copyFileSync(Path.join(from, relpath), dest)
+          created.push(relpath)
+        }
+      }
+    }
+  }
+  walk('.')
+
+  Fs.rmSync(staging, { recursive: true, force: true })
+
+  return { created: created.sort(), skipped: skipped.sort() }
 }
 
 
