@@ -22,11 +22,11 @@ const EXPECTED_FILES = [
   'backend/build/srv_yml.js',
   'backend/build/srv_handler.js',
   'backend/build/res_yml.js',
-  'backend/model/model.jsonic',
-  'backend/model/ent.jsonic',
-  'backend/model/msg.jsonic',
-  'backend/model/srv.jsonic',
-  'backend/model/conf.jsonic',
+  'backend/model/model.aontu',
+  'backend/model/ent.aontu',
+  'backend/model/msg.aontu',
+  'backend/model/srv.aontu',
+  'backend/model/conf.aontu',
   'backend/model/.model-config/model-config.aontu',
   'backend/src/env/shared/basic.ts',
   'backend/src/env/local/local.ts',
@@ -56,7 +56,7 @@ describe('create-system', () => {
     }
 
     // Parameterized by name.
-    const conf = Fs.readFileSync(Path.join(root, 'backend/model/conf.jsonic'), 'utf8')
+    const conf = Fs.readFileSync(Path.join(root, 'backend/model/conf.aontu'), 'utf8')
     expect(conf).contains("core: name: 'my-app'")
     expect(conf).contains("core: token: 'my-app-auth'")
 
@@ -72,11 +72,11 @@ describe('create-system', () => {
 
     // Empty of implementation: no active entities/services beyond sys,
     // examples present but commented.
-    const ent = Fs.readFileSync(Path.join(root, 'backend/model/ent.jsonic'), 'utf8')
+    const ent = Fs.readFileSync(Path.join(root, 'backend/model/ent.aontu'), 'utf8')
     expect(ent).contains('sys: user:')
     expect(ent).contains('# app: thing: {')
 
-    const srv = Fs.readFileSync(Path.join(root, 'backend/model/srv.jsonic'), 'utf8')
+    const srv = Fs.readFileSync(Path.join(root, 'backend/model/srv.aontu'), 'utf8')
     expect(srv).contains('# thing: {')
     expect(srv.split('\n').filter(
       (l: string) => /^[a-z]/.test(l) && !l.startsWith('&')).length).equal(0)

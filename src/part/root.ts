@@ -29,7 +29,7 @@ entities, services, or messages yet - only commented examples. Open
 \`\`\`
 ${name}/
   backend/
-    model/      voxgig-model sources (.jsonic) -> compiled model.json
+    model/      voxgig-model sources (.aontu) -> compiled model.json
     build/      model-build generation actions (Lambda templates)
     src/
       env/shared/basic.ts   core Seneca setup (entity + user + owner)
@@ -51,9 +51,9 @@ npm run local    # boot the backend locally
 
 ## Adding your first feature
 
-1. \`backend/model/ent.jsonic\` - uncomment the example entity.
-2. \`backend/model/msg.jsonic\` - uncomment the example messages.
-3. \`backend/model/srv.jsonic\` - uncomment the example service.
+1. \`backend/model/ent.aontu\` - uncomment the example entity.
+2. \`backend/model/msg.aontu\` - uncomment the example messages.
+3. \`backend/model/srv.aontu\` - uncomment the example service.
 4. \`backend/src/srv/\` - uncomment the example service implementation.
 5. \`npm run build && npm test\`
 
@@ -76,7 +76,6 @@ dist-test
 # voxgig-model: model-config.aontu is the hand-authored source (build actions);
 # model-config.json is compiled from it by model-build.
 **/.model-config/model-config.json
-**/.model-config/model-config.jsonic
 `)
   })
 }

@@ -14,7 +14,7 @@ function ModelPart(spec: Spec) {
 
   Folder({ name: 'model' }, () => {
 
-    File({ name: 'model.jsonic' }, () => {
+    File({ name: 'model.aontu' }, () => {
       Content(`
 @"@voxgig/model/model/sys.aontu"
 
@@ -35,10 +35,10 @@ main: shape: ent: {
 }
 
 
-main: msg: @"msg.jsonic"          # Seneca Messages
-main: srv: @"srv.jsonic"          # Services
-main: conf: @"conf.jsonic"        # Configuration
-main: ent: @"ent.jsonic"          # Entities
+main: msg: @"msg.aontu"          # Seneca Messages
+main: srv: @"srv.aontu"          # Services
+main: conf: @"conf.aontu"        # Configuration
+main: ent: @"ent.aontu"          # Entities
 
 
 main: srv: &: options: {
@@ -47,7 +47,7 @@ main: srv: &: options: {
 `)
     })
 
-    File({ name: 'ent.jsonic' }, () => {
+    File({ name: 'ent.aontu' }, () => {
       Content(`
 sys: &: $.main.shape.ent
 
@@ -102,7 +102,7 @@ sys: login: {
 `)
     })
 
-    File({ name: 'msg.jsonic' }, () => {
+    File({ name: 'msg.aontu' }, () => {
       Content(`
 ## Seneca message patterns.
 
@@ -131,13 +131,13 @@ aim: {}
 `)
     })
 
-    File({ name: 'srv.jsonic' }, () => {
+    File({ name: 'srv.aontu' }, () => {
       Content(`
 &: $.sys.shape.srv.std_ts
 
 
 ## Example service definition. Uncomment to add the example 'thing'
-## service (see also msg.jsonic and src/srv/).
+## service (see also msg.aontu and src/srv/).
 
 # thing: {
 #   in: {
@@ -151,7 +151,7 @@ aim: {}
 `)
     })
 
-    File({ name: 'conf.jsonic' }, () => {
+    File({ name: 'conf.aontu' }, () => {
       Content(`
 core: name: '${name}'
 core: short: '${name}'

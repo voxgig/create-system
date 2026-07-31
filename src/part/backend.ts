@@ -20,8 +20,8 @@ function BackendPart(spec: Spec) {
       scripts: {
         test: 'node --enable-source-maps --test-force-exit --test "dist-test/unit/**/*.test.js"',
         'test-some': 'node --enable-source-maps --test-force-exit --test-name-pattern="$npm_config_pattern" --test "dist-test/unit/**/*.test.js"',
-        model: 'voxgig-model model/model.jsonic --watch',
-        'model-build': 'voxgig-model model/model.jsonic',
+        model: 'voxgig-model model/model.aontu --watch',
+        'model-build': 'voxgig-model model/model.aontu',
         watch: 'tsc --build src test -w',
         build: 'npm run model-build && tsc --build src && tsc --build test',
         clean: 'rm -rf dist dist-test node_modules yarn.lock package-lock.json',
