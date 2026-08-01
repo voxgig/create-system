@@ -167,6 +167,9 @@ local: { active: true }
 # aws: { active: true, region: 'us-east-1', stage: 'dev' }
 # azure: { active: true }
 # cloudflare: { active: true }
+
+## The web frontend (experimental SPA on a Seneca bus):
+# web: { active: true }
 `)
     })
 

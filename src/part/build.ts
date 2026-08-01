@@ -109,6 +109,7 @@ const { EnvGen } = require('@voxgig/build')
 const folder = Path.join(__dirname, '..', 'gen', 'env')
 const tm = Path.join(__dirname, '..', 'tm', 'env')
 const src = Path.join(__dirname, '..', 'src', 'env')
+const root = Path.join(__dirname, '..', '..')
 
 module.exports = async function(model, build) {
   Fs.mkdirSync(folder, { recursive: true })
@@ -129,11 +130,11 @@ module.exports = async function(model, build) {
     }
     if (mod) {
       const gen = mod.env_gen || mod.default
-      return gen(model, { folder, tm, src })
+      return gen(model, { folder, tm, src, root })
     }
   }
 
-  await EnvGen.env_gen(model, { folder, tm, src })
+  await EnvGen.env_gen(model, { folder, tm, src, root })
 }
 `)
     })
