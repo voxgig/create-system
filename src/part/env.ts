@@ -29,11 +29,12 @@ import Model from '../../../model/model.json'
 // Core seneca setup shared by the local runner, the lambda bootstrap, and
 // (optionally) tests.
 //
-// Multi-user isolation is provided by two plugins:
-//   - \`user\`  : user records and the signed-in principal.
-//   - \`owner\` : automatically stamps and filters entities by the owning
-//               user (\`principal.user\` -> \`owner_id\`), so one user never
-//               sees another user's data.
+// \`user\` provides user records and the signed-in principal. Access control
+// is done EXPLICITLY in the service actions: the generic \`ent\` service scopes
+// by project membership, and a service can scope by owner_id from the
+// principal. @seneca/owner is intentionally NOT used — it annotated every
+// entity (including sys/user, which broke self-service password changes) and
+// its owner-only filter is incompatible with shared, membership-based data.
 const base = {
   seneca: {
     timeout: 5 * 60 * 1000,
@@ -60,13 +61,6 @@ const base = {
         standard: ['id', 'handle', 'email', 'name', 'active'],
       },
     },
-    owner: {
-      ownerprop: 'principal.user',
-      fields: ['id:owner_id'],
-      annotate: [
-        'sys:entity',
-      ],
-    },
     reload: {},
   },
 }
@@ -81,7 +75,6 @@ function basic(seneca: any, options?: any) {
     .use('entity', deep(base.options.entity, options.entity))
     .use('entity-util', deep(base.options.entity_util, options.entity_util))
     .use('user', deep(base.options.user, options.user))
-    .use('owner', deep(base.options.owner, options.owner))
     .use('reload', deep(base.options.reload, options.reload))
 
   return seneca
