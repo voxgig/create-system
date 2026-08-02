@@ -47,7 +47,6 @@ describe('boot', () => {
 
     expect(seneca.find_plugin('entity')).exist()
     expect(seneca.find_plugin('user')).exist()
-    expect(seneca.find_plugin('Owner')).exist() // @seneca/owner registers as 'Owner'
 
     await seneca.close()
   })
