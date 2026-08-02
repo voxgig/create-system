@@ -44,7 +44,7 @@ ${name}/
     model/      voxgig-model sources (.aontu) -> compiled model.json
     build/      model-build generation actions (deployment templates)
     src/
-      env/shared/basic.ts   core Seneca setup (entity + user)
+      env/shared/basic.ts   core Seneca setup (entity, user, owner)
       env/local/local.ts    local runner (in-memory store)
       env/lambda/lambda.ts  Lambda bootstrap for generated handlers
       srv/                  services (empty - see the commented example)
