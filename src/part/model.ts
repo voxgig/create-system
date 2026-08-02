@@ -88,6 +88,9 @@ sys: login: {
 #     owner_id: {
 #       label: 'Owner'
 #       kind: String
+#       ## Server-managed: @seneca/owner injects it AFTER validation runs,
+#       ## so without Skip every create fails as 'owner_id is required'.
+#       valid: Skip
 #     }
 #     t_c: {
 #       label: 'Created'
