@@ -91,7 +91,26 @@ const base = {
       ignore: ['sys:entity,base:sys'],
       rolesys: true,
       roles: {
-        member: { scope: 'project_id', grants: [{ entity: '*' }] },
+        member: {
+          scope: 'project_id',
+          grants: [
+            { entity: '*' },
+            // The project row IS the tenant, so it carries no project_id
+            // for owner to match against - matching one would deny every
+            // update. There is no axis to enforce here: membership of the
+            // row's OWN id is the only possible check, and access.ts makes
+            // it (ownerOf) before the save. Narrower grants win over the
+            // '*' grant above.
+            {
+              entity: 'proj/project',
+              spec: {
+                read: { project_id: false },
+                write: { project_id: false },
+                inject: { project_id: false },
+              },
+            },
+          ],
+        },
         // Entities with no ref to proj/project are not project data, so
         // they scope by the owner alone: no \`scope\`, and project_id is
         // switched off so it is neither injected nor queried.
