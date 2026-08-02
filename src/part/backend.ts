@@ -39,6 +39,7 @@ function BackendPart(spec: Spec) {
         '@seneca/gateway-express': '1.0.0',
         '@seneca/gateway-lambda': '1.1.0',
         '@seneca/reload': '0.5.0',
+        '@seneca/repl': '9.1.0',
         '@seneca/user': '6.4.0',
         '@voxgig/model': '9.2.4',
         '@voxgig/system': '1.2.0',
@@ -56,7 +57,7 @@ function BackendPart(spec: Spec) {
         '@types/cookie-parser': '1.4.10',
         '@types/express': '5.0.6',
         '@types/node': '^26.1.1',
-        '@voxgig/build': '4.7.0',
+        '@voxgig/build': '4.8.0',
         typescript: '5.9.3',
       },
     }, null, 2) + '\n')

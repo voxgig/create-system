@@ -47,3 +47,17 @@ example block yields working code.
 | `npm test` | unit tests (in-memory, no external services) |
 | `npm run local` | boot the backend locally |
 | `npm run web` | boot the web runner (after `add env web`) |
+
+The local dev runners (`local`, `web`) also start a Seneca REPL on
+`conf.port.repl` (default 50502; `REPL=false` disables) — connect with
+`npx seneca-repl telnet://localhost:50502`.
+
+## Generated documentation
+
+Model-build regenerates model-derived docs on every run (`@voxgig/build`
+`Docs.doc_gen`): `docs/reference/entities.md` (mermaid ER diagram),
+`docs/reference/messages.md` (message flows), `docs/reference/system-map.md`
+(architecture + dependencies), and a `README.md` per implemented service
+under `backend/src/srv/<srv>/`. These are AUTO-GENERATED — never
+hand-edit. The web env additionally generates a create-once doc sidecar
+per frontend component (`web/src/cmp/<name>.md`).

@@ -257,9 +257,12 @@ sys: model: action: {
   env_gen: {
     load: 'build/env_gen'
   }
+  doc_gen: {
+    load: 'build/doc_gen'
+  }
 }
 
-sys: model: order: action: 'srv_yml,srv_handler,res_yml,env_gen'
+sys: model: order: action: 'srv_yml,srv_handler,res_yml,env_gen,doc_gen'
 `)
       })
     })
