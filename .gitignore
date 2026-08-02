@@ -4,3 +4,7 @@ dist-test
 *.log
 *.tsbuildinfo
 .DS_Store
+
+# Coverage output (CI uploads it as an artifact)
+coverage.lcov
+*.lcov

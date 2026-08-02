@@ -1,0 +1,51 @@
+# CI for @voxgig/create-system: compile and run the scaffold suite.
+#
+# DORMANT. This file is not active while it lives in ci/ - GitHub only runs
+# workflows under .github/workflows/. See ci/README.md to activate.
+
+name: ci
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # package.json declares engines.node >= 20; 22 is what the generated
+      # projects deploy on, so build against the same.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: install
+        run: npm ci
+
+      - name: build
+        run: npm run build
+
+      # There is no coverage gate in `npm test` here (unlike @voxgig/build
+      # and the reference app), so coverage is reported for visibility
+      # only - it does not fail the build. See ci/README.md before adding
+      # a threshold: the headline number excludes dist/create.js, which no
+      # test loads.
+      - name: test
+        run: npm run test-cov
+
+      - name: upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage.lcov
+          if-no-files-found: warn
