@@ -41,6 +41,7 @@ main: conf: @"conf.aontu"        # Configuration
 main: ent: @"ent.aontu"          # Entities
 main: env: @"env.aontu"          # Target environments
 main: theme: @"theme.aontu"      # Design theme (UI)
+main: api: @"api.aontu"          # REST API (strict JSON)
 
 
 main: srv: &: options: {
@@ -219,6 +220,34 @@ modes: {
 `)
     })
 
+    File({ name: 'api.aontu' }, () => {
+      Content(`
+## REST API (strict JSON), served by the api service at
+## <prefix>/<version>/<zone>/<name>[/<id>] (e.g. /api/v1/shop/product/p01).
+## Uniform semantic paths + methods (list/load/create/update/remove) so an
+## SDK can be generated (sdkgen), and an OpenAPI spec is generated from the
+## entity field definitions on every model-build (gen/api/openapi.json).
+##
+## Authentication: API access keys (Authorization: Bearer <key>), created
+## and revoked per user in the web app (Settings & security), stored
+## hashed as sys/apikey entities. The api service itself is declared by
+## 'voxgig-system add env web'.
+##
+## Exposure: application entities are exposed by default; the sys zone is
+## never exposed. Configure per entity under ent:.
+
+active: true
+
+prefix: '/api'
+version: 'v1'
+
+## Per-entity config (all application entities active by default):
+# ent: {
+#   'shop/product': { active: false }   # hide one entity from the API
+# }
+`)
+    })
+
     File({ name: 'conf.aontu' }, () => {
       Content(`
 core: name: '${name}'
@@ -260,9 +289,12 @@ sys: model: action: {
   doc_gen: {
     load: 'build/doc_gen'
   }
+  api_gen: {
+    load: 'build/api_gen'
+  }
 }
 
-sys: model: order: action: 'srv_yml,srv_handler,res_yml,env_gen,doc_gen'
+sys: model: order: action: 'srv_yml,srv_handler,res_yml,env_gen,doc_gen,api_gen'
 `)
       })
     })

@@ -17,6 +17,7 @@ my-app/
       msg.aontu         messages (commented example)
       env.aontu         target environments (local active)
       theme.aontu       design theme: light + dark token modes
+      api.aontu         REST API config (prefix, version, exposure)
       conf.aontu        core config (name, ports)
       .model-config/    generation action wiring
     src/env/shared/   core Seneca setup (entity + user)
@@ -51,6 +52,15 @@ example block yields working code.
 The local dev runners (`local`, `web`) also start a Seneca REPL on
 `conf.port.repl` (default 50502; `REPL=false` disables) — connect with
 `npx seneca-repl telnet://localhost:50502`.
+
+## The REST API
+
+With the web env active, the project serves a strict-JSON REST API at
+`main.api.prefix` (`/api/v1/<zone>/<name>[/<id>]`), authenticated by API
+access keys (created in the web app's Settings & security). Model-build
+regenerates `backend/gen/api/openapi.json` (schemas from entity fields)
+and the request-validation shapes (`src/srv/api/valid_gen.ts`). See the
+generated project's `docs/how-to/use-the-api.md`.
 
 ## Generated documentation
 
