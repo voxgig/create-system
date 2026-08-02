@@ -21,6 +21,7 @@ import Path from 'node:path'
 import { Jostraca, Project, Folder } from 'jostraca'
 
 import { RootPart } from './part/root'
+import { DocsPart } from './part/docs'
 import { BackendPart } from './part/backend'
 import { BuildPart } from './part/build'
 import { ModelPart } from './part/model'
@@ -53,6 +54,7 @@ async function scaffold(spec: Spec): Promise<ScaffoldResult> {
     Project({ folder: spec.name }, () => {
 
       RootPart(spec)
+      DocsPart(spec)
 
       Folder({ name: 'backend' }, () => {
         BackendPart(spec)
