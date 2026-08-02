@@ -11,9 +11,11 @@ npm create @voxgig/system my-app
 
 The generated project is a [Seneca](https://senecajs.org) microservices
 backend with a model-driven entity layer (`@voxgig/model` +
-`@voxgig/system`), per-user data isolation via the Seneca `user` + `owner`
-plugins, and jostraca-generated Lambda deployment templates
-(`@voxgig/build`). The scaffold itself is generated with
+`@voxgig/system`), user accounts via the Seneca `user` plugin, a default
+design theme (light + dark), and jostraca-generated deployment templates
+(`@voxgig/build`). Activating the `web` environment
+(`voxgig-system add env web`) generates a complete model-driven
+enterprise web app on top. The scaffold itself is generated with
 [jostraca](https://github.com/jostraca/jostraca) components — see
 `src/part/*` for the template parts.
 
@@ -21,23 +23,21 @@ The project starts **empty**: the full structure is in place (model,
 environments, generation actions, tests), but there are no entities,
 services, or messages — only commented examples.
 
-## Generated structure
+## Documentation
 
-```
-my-app/
-  README.md .gitignore
-  backend/
-    package.json tsconfig.json
-    build/            model-build generation actions (@voxgig/build EnvLambda)
-    model/            voxgig-model sources; empty, with commented examples
-    src/env/shared/   core Seneca setup (entity + user + owner)
-    src/env/local/    local runner (in-memory store)
-    src/env/lambda/   Lambda bootstrap for generated handlers
-    src/srv/          services; commented example ('thing')
-    test/unit/        starter boot tests
-```
+Organised by the [Diátaxis](https://diataxis.fr) framework:
 
-After creation:
+- **Tutorial**: [Create and grow a project](docs/tutorial.md)
+- **How-to**: [Develop the scaffold](docs/how-to/develop-the-scaffold.md)
+- **Reference**: [Generated project structure](docs/reference/generated-structure.md)
+- **Explanation**: [Scaffold design](docs/explanation/scaffold-design.md)
+
+Working on this repo with an AI agent? See [AGENTS.md](AGENTS.md).
+
+The generated project ships its own Diátaxis `docs/` and `AGENTS.md`,
+covering the project (not this scaffolder).
+
+## After creation
 
 ```bash
 cd my-app/backend
@@ -46,25 +46,6 @@ npm run build   # compile model + generate + tsc
 npm test        # starter tests (green out of the box)
 npm run local   # boot the empty backend
 ```
-
-## Comment convention in generated files
-
-In the generated model and service files, `##` (jsonic) and `////` (TS)
-mark prose comments; a single `#` / `//` marks **disabled example code**.
-Uncommenting one comment level of an example block yields working code —
-the example `thing` entity/service/messages build, generate a Lambda
-handler, and answer messages once uncommented.
-
-## Develop
-
-```bash
-npm install
-npm run build
-npm test
-```
-
-`src/create.ts` is the CLI; `src/scaffold.ts` composes the jostraca
-component parts in `src/part/`.
 
 ## License
 
