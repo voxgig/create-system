@@ -14,9 +14,9 @@ function ModelPart(spec: Spec) {
 
   Folder({ name: 'model' }, () => {
 
-    File({ name: 'model.aontu' }, () => {
+    File({ name: 'model.aon' }, () => {
       Content(`
-@"@voxgig/model/model/sys.aontu"
+@"@voxgig/model/model/sys.aon"
 
 voxgig: build: version: '2'
 
@@ -35,13 +35,13 @@ main: shape: ent: {
 }
 
 
-main: msg: @"msg.aontu"          # Seneca Messages
-main: srv: @"srv.aontu"          # Services
-main: conf: @"conf.aontu"        # Configuration
-main: ent: @"ent.aontu"          # Entities
-main: env: @"env.aontu"          # Target environments
-main: theme: @"theme.aontu"      # Design theme (UI)
-main: api: @"api.aontu"          # REST API (strict JSON)
+main: msg: @"msg.aon"          # Seneca Messages
+main: srv: @"srv.aon"          # Services
+main: conf: @"conf.aon"        # Configuration
+main: ent: @"ent.aon"          # Entities
+main: env: @"env.aon"          # Target environments
+main: theme: @"theme.aon"      # Design theme (UI)
+main: api: @"api.aon"          # REST API (strict JSON)
 
 
 main: srv: &: options: {
@@ -50,7 +50,7 @@ main: srv: &: options: {
 `)
     })
 
-    File({ name: 'ent.aontu' }, () => {
+    File({ name: 'ent.aon' }, () => {
       Content(`
 sys: &: $.main.shape.ent
 
@@ -108,7 +108,7 @@ sys: login: {
 `)
     })
 
-    File({ name: 'msg.aontu' }, () => {
+    File({ name: 'msg.aon' }, () => {
       Content(`
 ## Seneca message patterns.
 
@@ -126,9 +126,10 @@ aim: {}
 # }
 
 
-## Gateway (web) routing to web_ action files.
+## Gateway (web) routing to web_ action files. aim:web is the only
+## namespace the gateway accepts from a browser.
 
-# aim: req: {
+# aim: web: {
 #   get: info: {}
 #   on: thing: {
 #     save: item: { '$': { file: './web_save_item' }}
@@ -137,18 +138,18 @@ aim: {}
 `)
     })
 
-    File({ name: 'srv.aontu' }, () => {
+    File({ name: 'srv.aon' }, () => {
       Content(`
 &: $.sys.shape.srv.std_ts
 
 
 ## Example service definition. Uncomment to add the example 'thing'
-## service (see also msg.aontu and src/srv/).
+## service (see also msg.aon and src/srv/).
 
 # thing: {
 #   in: {
 #     aim: thing: {}
-#     aim: req: on: thing: '$': allow: true
+#     aim: web: on: thing: '$': allow: true
 #   }
 #   user: required: true
 #   api: web: path: { area: 'private/', suffix: '' }
@@ -157,7 +158,7 @@ aim: {}
 `)
     })
 
-    File({ name: 'env.aontu' }, () => {
+    File({ name: 'env.aon' }, () => {
       Content(`
 ## Target environments. Each active environment generates deployment
 ## artifacts under gen/env/<name>/ and (once) a runtime entry under
@@ -178,7 +179,7 @@ local: { active: true }
 `)
     })
 
-    File({ name: 'theme.aontu' }, () => {
+    File({ name: 'theme.aon' }, () => {
       Content(`
 ## Design theme (UI), controlled by the model. Each mode is a set of design
 ## tokens (colors, fonts, radius, effects) emitted as CSS variables
@@ -223,7 +224,7 @@ modes: {
 `)
     })
 
-    File({ name: 'api.aontu' }, () => {
+    File({ name: 'api.aon' }, () => {
       Content(`
 ## REST API (strict JSON), served by the api service at
 ## <prefix>/<version>/<zone>/<name>[/<id>] (e.g. /api/v1/shop/product/p01).
@@ -251,7 +252,7 @@ version: 'v1'
 `)
     })
 
-    File({ name: 'conf.aontu' }, () => {
+    File({ name: 'conf.aon' }, () => {
       Content(`
 core: name: '${name}'
 core: short: '${name}'
@@ -268,9 +269,9 @@ port: {
     })
 
     Folder({ name: '.model-config' }, () => {
-      File({ name: 'model-config.aontu' }, () => {
+      File({ name: 'model-config.aon' }, () => {
         Content(`
-@"@voxgig/model/model/.model-config/model-config.aontu"
+@"@voxgig/model/model/.model-config/model-config.aon"
 
 ## Code-generation actions. Each loads a plain-JS script under build/ that
 ## runs during model-build and emits the Lambda deployment templates.

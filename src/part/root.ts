@@ -41,7 +41,7 @@ Working here with an AI agent? See [AGENTS.md](AGENTS.md).
 ${name}/
   docs/         project documentation (Diátaxis)
   backend/
-    model/      voxgig-model sources (.aontu) -> compiled model.json
+    model/      voxgig-model sources (.aon) -> compiled model.json
     build/      model-build generation actions (deployment templates)
     src/
       env/shared/basic.ts   core Seneca setup (entity, user, owner)
@@ -64,9 +64,9 @@ npm run local    # boot the backend locally
 
 ## Adding your first feature
 
-1. \`backend/model/ent.aontu\` - uncomment the example entity.
-2. \`backend/model/msg.aontu\` - uncomment the example messages.
-3. \`backend/model/srv.aontu\` - uncomment the example service.
+1. \`backend/model/ent.aon\` - uncomment the example entity.
+2. \`backend/model/msg.aon\` - uncomment the example messages.
+3. \`backend/model/srv.aon\` - uncomment the example service.
 4. \`backend/src/srv/\` - uncomment the example service implementation.
 5. \`npm run build && npm test\`
 
@@ -86,7 +86,7 @@ dist-test
 # jostraca build metadata (written during model-build generation)
 **/.jostraca/
 
-# voxgig-model: model-config.aontu is the hand-authored source (build actions);
+# voxgig-model: model-config.aon is the hand-authored source (build actions);
 # model-config.json is compiled from it by model-build.
 **/.model-config/model-config.json
 `)

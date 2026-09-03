@@ -18,7 +18,7 @@ function DocsPart(spec: Spec) {
     Content(`# Agent guide: ${name}
 
 A Voxgig system project: a Seneca microservices backend driven by a
-model (\`backend/model/*.aontu\` -> \`model.json\`). See [docs/](docs/)
+model (\`backend/model/*.aon\` -> \`model.json\`). See [docs/](docs/)
 for concepts; this file is operational guidance. The web app (if
 generated) has its own guide at \`web/AGENTS.md\`.
 
@@ -38,9 +38,9 @@ generated artifact or the web UI to reflect it.
 
 ## Layout
 
-- \`backend/model/\` - the model sources: \`ent.aontu\` (entities),
-  \`srv.aontu\` (services), \`msg.aontu\` (messages), \`env.aontu\`
-  (environments), \`theme.aontu\` (design theme), \`conf.aontu\` (config).
+- \`backend/model/\` - the model sources: \`ent.aon\` (entities),
+  \`srv.aon\` (services), \`msg.aon\` (messages), \`env.aon\`
+  (environments), \`theme.aon\` (design theme), \`conf.aon\` (config).
 - \`backend/src/srv/<srv>/\` - service actions; a model message maps to
   the file named after its LAST pattern pair (\`save:item\` ->
   \`save_item.ts\`).
@@ -92,7 +92,7 @@ npm run model-build
 
 The entity is now part of the model (\`backend/model/model.json\`) and
 usable through the Seneca entity layer. (Alternatively, uncomment the
-worked \`thing\` example in \`model/*.aontu\` and \`src/srv/\` - a single
+worked \`thing\` example in \`model/*.aon\` and \`src/srv/\` - a single
 \`#\` / \`//\` marks disabled example code.)
 
 ## 3. A service and a message
@@ -205,13 +205,13 @@ the menu with a working list/detail/form; no code needed.
 
 | File | Holds |
 |---|---|
-| \`model.aontu\` | Root: imports, entity shape, build config |
-| \`ent.aontu\` | Entities (\`<zone>: <name>: { field: ... }\`) |
-| \`srv.aontu\` | Services (which messages each service answers) |
-| \`msg.aontu\` | Messages (\`aim: <srv>: <verb>: <noun>: {}\` + params) |
-| \`env.aontu\` | Target environments (local/aws/web/...) |
-| \`theme.aontu\` | Design theme: named modes of design tokens |
-| \`conf.aontu\` | Core config: name, auth token, ports |
+| \`model.aon\` | Root: imports, entity shape, build config |
+| \`ent.aon\` | Entities (\`<zone>: <name>: { field: ... }\`) |
+| \`srv.aon\` | Services (which messages each service answers) |
+| \`msg.aon\` | Messages (\`aim: <srv>: <verb>: <noun>: {}\` + params) |
+| \`env.aon\` | Target environments (local/aws/web/...) |
+| \`theme.aon\` | Design theme: named modes of design tokens |
+| \`conf.aon\` | Core config: name, auth token, ports |
 | \`.model-config/\` | Generation actions run by model-build |
 
 \`npm run model-build\` unifies these (aontu) into \`model/model.json\`,
@@ -250,7 +250,7 @@ dependencies) - plus a README per implemented service under
 
 ## Model-driven
 
-The model (\`backend/model/*.aontu\`) is the single source of truth:
+The model (\`backend/model/*.aon\`) is the single source of truth:
 entities, services, messages, environments, and the design theme. It
 compiles (aontu unification) to \`model.json\`, which drives entity
 validation, code generation (\`@voxgig/build\`), message wiring
