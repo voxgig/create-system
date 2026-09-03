@@ -1,7 +1,7 @@
 /* Copyright © 2026 Voxgig Ltd, MIT License. */
 
 // backend/build/: the model-build generation actions. Plain JS, loaded by
-// voxgig-model (declared in model/.model-config/model-config.aontu).
+// voxgig-model (declared in model/.model-config/model-config.aon).
 //
 // Each action resolves its template in layers (first hit wins):
 //   1. backend/src/gen/<name>.ts  compiled generator override

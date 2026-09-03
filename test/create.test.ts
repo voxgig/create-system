@@ -23,14 +23,14 @@ const EXPECTED_FILES = [
   'backend/build/srv_handler.js',
   'backend/build/res_yml.js',
   'backend/build/env_gen.js',
-  'backend/model/env.aontu',
+  'backend/model/env.aon',
   'backend/tm/lambda/README.md',
-  'backend/model/model.aontu',
-  'backend/model/ent.aontu',
-  'backend/model/msg.aontu',
-  'backend/model/srv.aontu',
-  'backend/model/conf.aontu',
-  'backend/model/.model-config/model-config.aontu',
+  'backend/model/model.aon',
+  'backend/model/ent.aon',
+  'backend/model/msg.aon',
+  'backend/model/srv.aon',
+  'backend/model/conf.aon',
+  'backend/model/.model-config/model-config.aon',
   'backend/src/env/shared/basic.ts',
   'backend/src/env/local/local.ts',
   'backend/src/env/lambda/lambda.ts',
@@ -59,7 +59,7 @@ describe('create-system', () => {
     }
 
     // Parameterized by name.
-    const conf = Fs.readFileSync(Path.join(root, 'backend/model/conf.aontu'), 'utf8')
+    const conf = Fs.readFileSync(Path.join(root, 'backend/model/conf.aon'), 'utf8')
     expect(conf).contains("core: name: 'my-app'")
     expect(conf).contains("core: token: 'my-app-auth'")
 
@@ -75,11 +75,11 @@ describe('create-system', () => {
 
     // Empty of implementation: no active entities/services beyond sys,
     // examples present but commented.
-    const ent = Fs.readFileSync(Path.join(root, 'backend/model/ent.aontu'), 'utf8')
+    const ent = Fs.readFileSync(Path.join(root, 'backend/model/ent.aon'), 'utf8')
     expect(ent).contains('sys: user:')
     expect(ent).contains('# app: thing: {')
 
-    const srv = Fs.readFileSync(Path.join(root, 'backend/model/srv.aontu'), 'utf8')
+    const srv = Fs.readFileSync(Path.join(root, 'backend/model/srv.aon'), 'utf8')
     expect(srv).contains('# thing: {')
     expect(srv.split('\n').filter(
       (l: string) => /^[a-z]/.test(l) && !l.startsWith('&')).length).equal(0)
@@ -124,7 +124,7 @@ describe('idempotency', () => {
     const out = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'create-system-'))
     await scaffold({ name: 'cust', folder: out })
 
-    const conf = Path.join(out, 'cust', 'backend', 'model', 'conf.aontu')
+    const conf = Path.join(out, 'cust', 'backend', 'model', 'conf.aon')
     Fs.writeFileSync(conf, "core: name: 'customized'\n")
 
     const readme = Path.join(out, 'cust', 'README.md')
