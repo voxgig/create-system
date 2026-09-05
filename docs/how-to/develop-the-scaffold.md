@@ -1,6 +1,6 @@
 # How to develop the scaffold
 
-*Diátaxis: how-to guide — for contributors changing what
+*A how-to guide — for contributors changing what
 `@voxgig/create-system` generates.*
 
 ## Build and test
@@ -18,7 +18,7 @@ npm test          # node:test (test/*.test.ts compiled to dist-test/)
 - `src/part/*.ts` — one part per area: `model.ts` (model sources incl.
   `theme.aontu`), `backend.ts` (package.json deps), `env.ts` (runtime env
   entries), `build.ts` (generation actions), `srv.ts`, `test.ts`,
-  `top.ts`, `docs.ts` (project docs + AGENTS.md).
+  `root.ts`, `docs.ts` (project docs and the agent guide).
 
 Parts express files as jostraca `File`/`Content` calls with template
 literals — edit the literal, rebuild, and verify by scaffolding a fresh

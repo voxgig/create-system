@@ -1,6 +1,6 @@
 # Tutorial: create and grow a project
 
-*Diátaxis: tutorial — from nothing to a running model-driven web app.*
+*A tutorial — from nothing to a running model-driven web app.*
 
 ## 1. Create
 
@@ -49,6 +49,6 @@ You now have the full enterprise SPA (public site, login, app shell,
 generic CRUD for your entities, settings, light/dark theme). It is
 model-driven at runtime: add another entity, `model-build`, reload.
 
-From here, the *generated project's own* `docs/` folder (also Diátaxis)
-takes over — it documents the app you now own, including customisation
-hooks, custom entity views, and theming.
+From here, the *generated project's own* `docs/` folder takes over — it
+documents the app you now own, including customisation hooks, custom
+entity views, and theming.

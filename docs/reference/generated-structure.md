@@ -1,11 +1,11 @@
 # Reference: generated project structure
 
-*Diátaxis: reference — what `npm create @voxgig/system my-app` produces.*
+*Reference — what `npm create @voxgig/system my-app` produces.*
 
 ```
 my-app/
   README.md  .gitignore  AGENTS.md
-  docs/               project documentation (Diátaxis; tutorial, how-to,
+  docs/               project documentation (tutorial, how-to,
                       reference, explanation)
   backend/
     package.json tsconfig.json
@@ -29,7 +29,7 @@ my-app/
 
 Activating the web environment (`voxgig-system add env web` +
 `npm run model-build`) additionally generates `web/` (the SPA, with its
-own `web/AGENTS.md`), `backend/src/env/web/`, `backend/src/srv/auth/`,
+own agent guide), `backend/src/env/web/`, `backend/src/srv/auth/`,
 `backend/src/srv/ent/`, and web-specific docs under `docs/` — see
 `@voxgig/build`'s EnvWeb reference.
 

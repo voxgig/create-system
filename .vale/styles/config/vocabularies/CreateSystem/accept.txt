@@ -1,0 +1,41 @@
+# Terms Vale's dictionary does not know. Entries are REGEXES, so
+# [Vv]oxgig accepts both casings without Vale.Terms then enforcing one of
+# them over the other -- listing both plain forms is what turns this file
+# into a capitalisation rule by accident.
+#
+# EVERY ENTRY BELOW WAS MEASURED, not guessed. `Vale.Spelling` and
+# `Google.Spelling` at error level over the 5 reader-facing pages produced
+# 29 alerts across 17 distinct words on a clean run; two of those
+# (`Organised`, `repo`) left the pages in the rewrite that adopted the
+# gate, and this file is the remaining 15, sorted into the groups below,
+# and nothing else. A word that stops appearing in the docs should come
+# out of here, and a new one is added when the gate asks for it.
+
+[Vv]oxgig
+
+# British spellings. Google style is US English; the house voice is not,
+# and the precedence in .vale.ini puts the house voice first.
+#
+# LISTED, not matched by suffix. `\w+ise` and friends accept any word
+# ending in those letters -- `madeupise` included -- and so punch a hole
+# straight through the error-level spelling gate this file exists to make
+# usable. Add the stem when a new one is needed; the cost of doing that is
+# the point. The group is empty: the one British form the pages carried
+# (`Organised`) went with the sentence it was in.
+
+# The scaffold and the generated project.
+jostraca
+jsonic
+scaffolded
+scaffolder
+[Uu]ncomment
+[Uu]ncommenting
+
+# General programming vocabulary.
+codegen
+config
+deps
+dev
+env
+npm
+src

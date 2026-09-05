@@ -25,17 +25,24 @@ services, or messages — only commented examples.
 
 ## Documentation
 
-Organised by the [Diátaxis](https://diataxis.fr) framework:
+Four pages, one of each kind:
 
-- **Tutorial**: [Create and grow a project](docs/tutorial.md)
-- **How-to**: [Develop the scaffold](docs/how-to/develop-the-scaffold.md)
-- **Reference**: [Generated project structure](docs/reference/generated-structure.md)
-- **Explanation**: [Scaffold design](docs/explanation/scaffold-design.md)
+- [Create and grow a project](docs/tutorial.md). The tutorial, from
+  nothing to a running model-driven web app.
+- [Develop the scaffold](docs/how-to/develop-the-scaffold.md). A how-to
+  for contributors changing what this package generates.
+- [Generated project structure](docs/reference/generated-structure.md).
+  The reference for what `npm create @voxgig/system` produces.
+- [Scaffold design](docs/explanation/scaffold-design.md). The explanation
+  of why the scaffold is shaped this way.
 
-Working on this repo with an AI agent? See [AGENTS.md](AGENTS.md).
+The generated project ships its own `docs/` and its own agent guide,
+covering the project rather than this scaffolder.
 
-The generated project ships its own Diátaxis `docs/` and `AGENTS.md`,
-covering the project (not this scaffolder).
+Contributing to the scaffold itself is a short loop: rebuild (`npm run
+build`) before testing, because the tests run the compiled `dist/`, and
+verify a change by scaffolding a fresh project in a scratch directory.
+The documentation follows [the style guide](STYLE-GUIDE.md).
 
 ## After creation
 
