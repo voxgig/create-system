@@ -1,6 +1,6 @@
 # Explanation: scaffold design
 
-*Diátaxis: explanation — why the scaffold is shaped this way.*
+*An explanation — why the scaffold is shaped this way.*
 
 ## Empty, but complete
 
@@ -31,7 +31,7 @@ model rather than a scaffold-time snapshot.
 
 ## Docs ship with the project
 
-The scaffold generates a Diátaxis `docs/` and `AGENTS.md` *for the
+The scaffold generates a `docs/` tree and an agent guide *for the
 generated project* — documentation of the app the user now owns, not of
 the tooling. Rationale: a generated codebase is exactly the kind of code
 whose conventions are non-obvious to newcomers (human or agent), because

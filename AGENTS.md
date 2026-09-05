@@ -17,7 +17,11 @@ node dist/create.js <name>   # scaffold a project (run in a scratch dir)
 - `src/create.ts` CLI → `src/scaffold.ts` composes jostraca parts in
   `src/part/`: `model.ts` (model sources incl. `theme.aontu`),
   `backend.ts` (deps/scripts), `env.ts`, `build.ts`, `srv.ts`, `test.ts`,
-  `top.ts`, `docs.ts` (project docs + AGENTS.md).
+  `root.ts`, `docs.ts` (project docs + AGENTS.md).
+- `docs/` the reader-facing pages (one per kind), `STYLE-GUIDE.md` the
+  rules they follow, `tools/check_prose.py` + `.vale.ini` + `.vale/` the
+  gate, `.github/workflows/docs.yml` the CI job that runs it. `ci/` holds
+  the dormant build workflow.
 
 ## Hard rules
 
@@ -65,3 +69,30 @@ node dist/create.js <name>   # scaffold a project (run in a scratch dir)
   their own path.
 - Aontu/jsonic comments are `#` only; quote values containing `-`, `/`,
   `#`.
+
+## Prose follows STYLE-GUIDE.md
+
+[`STYLE-GUIDE.md`](STYLE-GUIDE.md) is normative for the reader-facing pages:
+the root `README.md` and every page under `docs/`. Two gates enforce it and
+both run in CI (`.github/workflows/docs.yml`):
+
+| Gate | Checks |
+|---|---|
+| `vale --minAlertLevel=error $(python3 tools/check_prose.py --files)` | Google's rules plus the banned list, at the levels in `.vale.ini` |
+| `python3 tools/check_prose.py` | the banned list across line wraps, em-dash spacing and ration, first person, no emoji, no citations of a working document, resolving relative links, a complete page set |
+
+`npm run scan-prose` runs the second locally (no install needed); run
+Vale by hand where it is installed (`vale sync` once, then the command
+above). Neither is chained into `npm test`, which runs on a platform
+matrix. The banned list is
+`.vale/styles/config/vocabularies/CreateSystem/reject.txt`, read by both
+gates. The page set is the configuration block at the top of
+`tools/check_prose.py`; a new documentation page must be reachable from it
+or neither gate reads it.
+
+Three things trip agents most often: a page must not name or link
+`AGENTS.md` or `CLAUDE.md` (state the fact instead — and the generated
+project's own `AGENTS.md` is "the agent guide" in prose, since the gate
+cannot tell the two apart); the em dash is spaced (` — `) and rationed to
+one aside per line; and a word Vale's dictionary does not know goes into
+`accept.txt` one entry at a time, never as a suffix pattern.
