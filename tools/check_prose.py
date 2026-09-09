@@ -66,8 +66,8 @@ ROOT_PAGES = ("README.md",)
 DOC_GLOBS = ("docs/**/*.md",)
 NOT_DOCS = ()
 
-# Pages outside the tree. None here: ci/README.md documents a dormant
-# workflow for the people who would activate it, not for a reader.
+# Pages outside the tree. None here: ci/README.md is a note to whoever
+# maintains the build workflow, not something a reader lands on.
 EXTRA_PAGES = ()
 
 # Multi-port layout (one directory per language, each carrying its own

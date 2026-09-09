@@ -1,7 +1,15 @@
 # CI for @voxgig/create-system: compile and run the scaffold suite.
 #
-# DORMANT. This file is not active while it lives in ci/ - GitHub only runs
-# workflows under .github/workflows/. See ci/README.md to activate.
+# ACTIVE. It ran nowhere while it sat in ci/ - GitHub only runs workflows
+# under .github/workflows/ - so until this file moved here, publish.yml was
+# the only thing that ever compiled this package. Notes that outlived the
+# move are in ci/README.md: what a coverage gate would have to account for,
+# and the one check this workflow still does not make.
+#
+# COVERAGE IS REPORTED, NOT GATED, and ci/README.md says why a threshold set
+# from the headline figure would lock in an illusion: Node reports only the
+# files a test loaded, so dist/create.js is missing from the table rather
+# than counted as zero.
 
 name: ci
 

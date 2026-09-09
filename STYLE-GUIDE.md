@@ -116,12 +116,12 @@ The banned set, by name:
 | Document | What it is |
 |---|---|
 | `AGENTS.md`, `CLAUDE.md` | instructions to contributors and agents working in the repository |
-| `ci/COVERAGE.md` | the coverage notes beside the dormant workflow in `ci/`, written for whoever activates it |
+| `ci/COVERAGE.md` | the coverage notes for the build workflow, written for whoever sets a coverage gate |
 | any `*_PLAN.md` or `*_REVIEW.md`, and `BUILD_LOG.md` | the shapes this project has not needed yet, guarded in advance |
 
 `ci/README.md` is outside the page set for the same reason as its
-neighbour, though a page may still name it: it describes a workflow that
-does not run.
+neighbour, though a page may still name it: it is a note to whoever
+maintains the build workflow, not a page a reader lands on.
 
 The ban covers the name as much as the link. "The full checklist is in
 `AGENTS.md`" fails for the same reason the URL does: the reader still

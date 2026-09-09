@@ -20,8 +20,9 @@ node dist/create.js <name>   # scaffold a project (run in a scratch dir)
   `root.ts`, `docs.ts` (project docs + AGENTS.md).
 - `docs/` the reader-facing pages (one per kind), `STYLE-GUIDE.md` the
   rules they follow, `tools/check_prose.py` + `.vale.ini` + `.vale/` the
-  gate, `.github/workflows/docs.yml` the CI job that runs it. `ci/` holds
-  the dormant build workflow.
+  gate, `.github/workflows/docs.yml` the CI job that runs it.
+  `.github/workflows/ci.yml` builds and tests on every push, with its
+  notes in `ci/`.
 
 ## Hard rules
 

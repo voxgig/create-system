@@ -50,13 +50,17 @@
 #
 # `npm ci`, NOT `npm install`. Unlike the multi-language libraries, this
 # repository COMMITS package-lock.json, so the release installs exactly what
-# was reviewed. ci/ci.yml installs the same way.
+# was reviewed. .github/workflows/ci.yml installs the same way.
 #
-# THIS IS CURRENTLY THE ONLY AUTOMATED BUILD AND TEST. ci/ci.yml is
-# deliberately dormant (see ci/README.md), so nothing compiles this package
-# on a push. Until that is activated, the build and test below are the whole
-# gate, which is a reason to keep them here rather than assume CI has already
-# run them.
+# THIS IS NO LONGER THE ONLY AUTOMATED BUILD AND TEST. ci.yml was dormant in
+# ci/ until it was activated, and nothing compiled this package on a push
+# before that; now it builds and tests on every push and pull request.
+#
+# THE BUILD AND TEST BELOW STAY ANYWAY, and not out of caution. Nothing here
+# reads ci.yml's result: a dispatch releases the ref it is given whether that
+# commit's CI is green, red, or still queued. So these steps are not a
+# duplicate of CI, they are the only build and test that a release is
+# guaranteed to have run.
 #
 # TWO WAYS IN:
 #
