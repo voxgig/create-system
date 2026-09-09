@@ -39,11 +39,21 @@ Worth adding as a job once they are released. It is the check that would
 have caught the pins being wrong in the first place: `@voxgig/build` was
 pinned to 4.10.0, a version that never existed on npm.
 
-## Actions are not pinned here
+## Actions must be pinned, and the repository enforces it
 
-`ci.yml` uses floating major tags (`actions/checkout@v4`,
-`actions/setup-node@v4`, `actions/upload-artifact@v4`), while `docs.yml`
-and `publish.yml` pin every action to a full-length commit SHA. That
-difference is not deliberate — it is what the file carried while it was
-dormant and nothing ran it. Pinning it to match the sibling workflows is
-worth doing; the majors are behind those files too, which use v7.
+Every action in `ci.yml` is pinned to a full-length commit SHA. This is not
+a style preference: the repository requires it and GitHub checks it before
+a single step runs. The first run after activation failed in seven seconds,
+having reached no step at all:
+
+```
+The actions actions/checkout@v4, actions/setup-node@v4, and
+actions/upload-artifact@v4 are not allowed in voxgig/create-system
+because all actions must be pinned to a full-length commit SHA.
+```
+
+The floating tags this file carried while dormant were therefore never a
+cosmetic difference from `docs.yml` and `publish.yml` — they were why it
+could not start. Nothing runnable locally catches this, because the policy
+is applied when the workflow loads rather than by anything `npm` does. A
+change that adds an action here needs its SHA before it will run at all.

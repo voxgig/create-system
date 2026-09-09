@@ -6,6 +6,24 @@
 # move are in ci/README.md: what a coverage gate would have to account for,
 # and the one check this workflow still does not make.
 #
+# EVERY ACTION IS PINNED TO A FULL-LENGTH COMMIT SHA, because this repository
+# requires it and GitHub enforces that before a single step runs. The first
+# run after activation failed in seven seconds on exactly that:
+#
+#   The actions actions/checkout@v4, actions/setup-node@v4, and
+#   actions/upload-artifact@v4 are not allowed in voxgig/create-system
+#   because all actions must be pinned to a full-length commit SHA.
+#
+# So the floating tags this file carried while dormant were never a style
+# nit; they were why it could not start. Nothing runnable locally catches
+# this -- the policy is applied at workflow load, not by npm.
+#
+# checkout and setup-node reuse the exact pins docs.yml and publish.yml
+# already run, so they are this repository's own trusted choice rather than
+# a new one. upload-artifact has no precedent here, so it is pinned to the
+# commit its `v4` tag names -- the version this file already declared,
+# pinned rather than upgraded.
+#
 # COVERAGE IS REPORTED, NOT GATED, and ci/README.md says why a threshold set
 # from the headline figure would lock in an illusion: Node reports only the
 # files a test loaded, so dist/create.js is missing from the table rather
@@ -27,11 +45,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       # package.json declares engines.node >= 20; 22 is what the generated
       # projects deploy on, so build against the same.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: '22'
           cache: npm
@@ -52,7 +70,7 @@ jobs:
 
       - name: upload coverage
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: coverage
           path: coverage.lcov
