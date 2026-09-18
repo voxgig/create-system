@@ -97,3 +97,9 @@ project's own `AGENTS.md` is "the agent guide" in prose, since the gate
 cannot tell the two apart); the em dash is spaced (` — `) and rationed to
 one aside per line; and a word Vale's dictionary does not know goes into
 `accept.txt` one entry at a time, never as a suffix pattern.
+
+## Source code comments
+
+Follow [COMMENT-POLICY.md](COMMENT-POLICY.md): comments are sparse and terse,
+only for intricate or surprising code. Names carry intent; documents carry
+requirements. Run `make comments comments-test` after editing source.

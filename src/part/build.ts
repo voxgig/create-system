@@ -1,13 +1,5 @@
 /* Copyright © 2026 Voxgig Ltd, MIT License. */
 
-// backend/build/: the model-build generation actions. Plain JS, loaded by
-// voxgig-model (declared in model/.model-config/model-config.aon).
-//
-// Each action resolves its template in layers (first hit wins):
-//   1. backend/src/gen/<name>.ts  compiled generator override
-//   2. backend/tm/lambda/<frag>   project fragment (via spec.tm)
-//   3. @voxgig/build defaults
-// Use `voxgig-system template list|eject|diff` to customize.
 
 import { File, Content, Folder } from 'jostraca'
 
