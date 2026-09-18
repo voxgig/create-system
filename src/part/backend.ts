@@ -1,7 +1,5 @@
 /* Copyright © 2026 Voxgig Ltd, MIT License. */
 
-// backend/package.json and the tsconfig triple (root composite,
-// src, test). Package versions mirror a known-good working system.
 
 import { File, Content, Folder } from 'jostraca'
 

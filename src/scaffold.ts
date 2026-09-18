@@ -1,18 +1,5 @@
 /* Copyright © 2026 Voxgig Ltd, MIT License. */
 
-// The project scaffold, built with jostraca components. Each part
-// (src/part/*) is a jostraca component contributing one area of the
-// generated project; this module composes them into the full tree:
-//
-//   <name>/
-//     README.md .gitignore
-//     backend/
-//       package.json tsconfig.json
-//       build/            model-build generation actions (@voxgig/build)
-//       model/            voxgig-model sources (empty; commented examples)
-//       src/env/          shared/local/lambda environments
-//       src/srv/          services (empty; commented example)
-//       test/             starter unit test
 
 import Fs from 'node:fs'
 import Os from 'node:os'
