@@ -49,7 +49,7 @@
     "LICENSE"
   ],
   "dependencies": {
-    "jostraca": "0.41.0"
+    "jostraca": "0.42.0"
   },
   "devDependencies": {
     "@hapi/code": "^9.0.3",
